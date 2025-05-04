@@ -15,14 +15,20 @@ def hash(word: str):
     return word
 
 def main():
-
-    #------------------------------------------ YOUR CODE GOES HERE ------------------------------------------
-
-    # TODO: replace this code with your multiprocessed version
-    for word in WORDS:
-        print(hash(word))
-
-    #---------------------------------------------------------------------------------------------------------
+    start_time = time.time()
+    
+    with mp.Pool() as pool:
+        results = []
+        
+        for word in WORDS:
+            result = pool.apply_async(hash, args=(word,))
+            results.append(result)
+        
+        for result in results:
+            print(result.get())
+    
+    end_time = time.time()
+    print(f"\nTotal execution time: {end_time - start_time:.2f} seconds")
 
 if __name__ == '__main__':
     main()
